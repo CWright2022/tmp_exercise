@@ -5,7 +5,7 @@
 import os
 import random
 
-DATA_TO_SEND = "Hello Covert"
+DATA_TO_SEND = "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life. - John 3:16"
     
 def wait_for_rx_consume():
     """
@@ -21,8 +21,9 @@ def set_dsr():
                 f.write("")
 def main():
     #convert message to binary
-    binary = ''.join(format(ord(char), '08b') for char in DATA_TO_SEND)
-    print(f"sending: {binary}")
+    binary = ''.join(format(byte, '08b') for byte in DATA_TO_SEND.encode('utf-8'))
+    print(f"MESSAGE: {DATA_TO_SEND}")
+    print(f"BINARY: {binary}")
     #signal receiver we are ready, wait for response
     #send data
     i = 0
@@ -32,14 +33,14 @@ def main():
             with open("/tmp/data", "w") as f:
                 bytes = random.randint(100,200)
                 f.write(os.urandom(bytes).hex())
-                print(f"wrote {bytes} bytes to /tmp/data")
+                # print(f"wrote {bytes} bytes to /tmp/data")
         elif bit == '0':
             with open("/tmp/data", "w") as f:
                 bytes = random.randint(1,99)
                 f.write(os.urandom(bytes).hex())
-                print(f"wrote {bytes} bytes to /tmp/data")
+                # print(f"wrote {bytes} bytes to /tmp/data")
         print(f"sent bit {bit} ({i+1}/{len(binary)})")
-        print(f"/tmp/data size: {os.path.getsize('/tmp/data')}")
+        # print(f"/tmp/data size: {os.path.getsize('/tmp/data')}")
         i+=1
         set_dsr()
         #wait for receiver to consume data (it will delete /tmp/data))
@@ -48,8 +49,8 @@ def main():
     with open("/tmp/data", "w") as f:
         bytes = random.randint(201,300)
         f.write(os.urandom(bytes).hex())
-        print(f"wrote {bytes} bytes to /tmp/data")
-        print(f"/tmp/data size: {os.path.getsize('/tmp/data')}")
+        # print(f"wrote {bytes} bytes to /tmp/data")
+        # print(f"/tmp/data size: {os.path.getsize('/tmp/data')}")
     set_dsr()
     print("transmission complete")
     
